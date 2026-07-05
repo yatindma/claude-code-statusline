@@ -137,6 +137,11 @@ if [ -n "$used_pct" ]; then
   else ctx_c="$c_red"; fi
   # Fractional bar: 8 cells × 8 eighths = 64 steps, so even 1-2% shows a sliver.
   # Filled part in the usage color, empty part dim so the fill is always visible.
+  # NOTE: fine eighth-block glyphs (▏▎▍▌▋▊▉) are not fully supported by every
+  # monospace font — the thinner ones (▏▎) render blank/tofu in some fonts,
+  # showing up as an intermittent visual "gap" right at the fill boundary.
+  # Shade blocks (░▒▓) are universally supported across terminal fonts, so we
+  # use those for the partial cell instead — same granularity, no gap risk.
   BAR_W=8
   eighths=$(( used * BAR_W * 8 / 100 ))
   [ "$eighths" -eq 0 ] && [ "$used" -gt 0 ] && eighths=1   # always show a sliver if used
@@ -146,10 +151,10 @@ if [ -n "$used_pct" ]; then
     if   [ "$ce" -ge 8 ]; then bar="${bar}${ctx_c}█"
     elif [ "$ce" -le 0 ]; then bar="${bar}${c_overlay}░"
     else
-      case $ce in
-        1) g="▏";; 2) g="▎";; 3) g="▍";; 4) g="▌";;
-        5) g="▋";; 6) g="▊";; 7) g="▉";;
-      esac
+      if   [ "$ce" -le 2 ]; then g="░"
+      elif [ "$ce" -le 5 ]; then g="▒"
+      else g="▓"
+      fi
       bar="${bar}${ctx_c}${g}"
     fi
   done
