@@ -100,6 +100,20 @@ echo '{"model":{"display_name":"Sonnet 5","id":"claude-sonnet-5"},"workspace":{"
 
 You should see a colored line with a context bar. The usage bars appear once the usage API responds.
 
+## Toggle on/off
+
+Hide or show the status line without touching `settings.json`:
+
+```bash
+./toggle.sh off     # hides the status line (blank output)
+./toggle.sh on      # shows it again
+./toggle.sh status  # check current state
+```
+
+This works by dropping/removing a flag file at `~/.claude/.statusline-disabled` — when
+present, `statusline-command.sh` exits immediately with no output. Changes apply on the
+next render (may take a new message/prompt to refresh).
+
 ## How it works
 
 | Segment | Source |

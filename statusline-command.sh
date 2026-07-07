@@ -18,6 +18,10 @@
 
 input=$(cat)
 
+# -- On/off toggle -- run `./toggle.sh off` / `./toggle.sh on` to flip.
+DISABLE_FLAG="$HOME/.claude/.statusline-disabled"
+[ -f "$DISABLE_FLAG" ] && exit 0
+
 # -- Colors --
 c_blue=$'\x1b[38;2;137;180;250m'
 c_sapphire=$'\x1b[38;2;116;199;236m'
